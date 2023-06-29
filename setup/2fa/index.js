@@ -6,15 +6,15 @@ const app = express();
 const port = 7777;
 
 const email = "nunyabiz";
-const thingy = "nunyabiz";
+const site = "nunyabiz";
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/', (req, res) => {
-    secret = authenticator.generateSecret();
-    QRCode.toDataURL(authenticator.keyuri(email, thingy, secret), (err, url) => {
+    let secret = authenticator.generateSecret();
+    QRCode.toDataURL(authenticator.keyuri(email, site, secret), (err, url) => {
         if (err) throw err;
-        res.send(`<img src='${url}'/>`);
+        res.send(`<div><img src='${url}'/></div><div>${secret}</div>`);
     })
 })
 
