@@ -18,7 +18,7 @@ export const handler = async (event) => {
         let decrypted = decipher.update(authorization, "hex", "utf-8");
         decrypted += decipher.final("utf8");
         const sessionObject = JSON.parse(decrypted);
-        query = await dynamo.send(new GetCommand({
+        const query = await dynamo.send(new GetCommand({
             TableName: TABLE_SESSIONS,
             Key: { id: sessionObject.id }
         }));
