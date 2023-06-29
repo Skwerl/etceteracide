@@ -26,6 +26,7 @@ export const handler = async (event, context) => {
                 req = JSON.parse(event.body);
                 let { email, code } = req;
                 let token = "";
+                let sessionId = "";
                 let authorized = false;
                 query = await dynamo.send(new ScanCommand({
                     TableName: TABLE_USERS
@@ -33,8 +34,9 @@ export const handler = async (event, context) => {
                 let found = query.Items.find(Item => Item.email === email);
                 if (found && authenticator.check(code, found.secret)) {
                     let suid = crypto.randomBytes(16);
+                    sessionId = suid.toString("hex");
                     const sessionObject = {
-                        id: suid.toString("hex"),
+                        id: sessionId,
                         user_id: found.id,
                         exp: ""
                     }
@@ -47,7 +49,7 @@ export const handler = async (event, context) => {
                     token += cipher.final("hex");
                     authorized = true;
                 }
-                body = { authorized, token };
+                body = { authorized, token, sessionId };
                 break;
             case "PUT /items":
                 req = JSON.parse(event.body);
