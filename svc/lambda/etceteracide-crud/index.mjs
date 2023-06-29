@@ -1,15 +1,18 @@
+import crypto from 'crypto';
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
-import { PutCommand, ScanCommand, GetCommand, DeleteCommand } from "@aws-sdk/lib-dynamodb";
+import { ScanCommand, GetCommand, PutCommand, DeleteCommand } from "@aws-sdk/lib-dynamodb";
+import { authenticator } from "otplib";
 
-const DYNAMODB_ENDPOINT = "https://dynamodb.us-west-1.amazonaws.com";
-const DYNAMODB_TABLE = "etceteracide-content";
+const { DYNAMODB_ENDPOINT, TABLE_CONTENT, TABLE_SESSIONS, TABLE_USERS, CRYPTO_KEY_HEX } = process.env;
+const CRYPTO_KEY = Buffer.from(CRYPTO_KEY_HEX, "hex");
 
 export const handler = async (event, context) => {
 
     const client = new DynamoDBClient({ endpoint: DYNAMODB_ENDPOINT });
     const dynamo = DynamoDBDocumentClient.from(client);
 
+    let req;
     let query;
     let body;
     let statusCode = 200;
@@ -19,32 +22,59 @@ export const handler = async (event, context) => {
 
     try {
         switch (event.routeKey) {
+            case "POST /auth":
+                req = JSON.parse(event.body);
+                let { email, code } = req;
+                let token = "";
+                let authorized = false;
+                query = await dynamo.send(new ScanCommand({
+                    TableName: TABLE_USERS
+                }));
+                let found = query.Items.find(Item => Item.email === email);
+                if (found && authenticator.check(code, found.secret)) {
+                    let suid = crypto.randomBytes(16);
+                    const sessionObject = {
+                        id: suid.toString("hex"),
+                        user_id: found.id,
+                        exp: ""
+                    }
+                    await dynamo.send(new PutCommand({
+                        TableName: TABLE_SESSIONS,
+                        Item: sessionObject
+                    }));
+                    const cipher = crypto.createCipheriv("aes-256-cbc", CRYPTO_KEY, suid);
+                    token = cipher.update(JSON.stringify(sessionObject), "utf-8", "hex");
+                    token += cipher.final("hex");
+                    authorized = true;
+                }
+                body = { authorized, token };
+                break;
             case "PUT /items":
-                let requestJSON = JSON.parse(event.body);
+                req = JSON.parse(event.body);
                 await dynamo.send(new PutCommand({
-                    TableName: DYNAMODB_TABLE,
+                    TableName: TABLE_CONTENT,
                     Item: {
-                        ...requestJSON
+                        ...req
                     }
                 }));
-                body = `Put item ${requestJSON.id}`;
+                body = `Put item ${req.id}`;
                 break;
             case "GET /items":
                 query = await dynamo.send(new ScanCommand({
-                    TableName: DYNAMODB_TABLE
+                    TableName: TABLE_CONTENT
                 }));
                 body = query.Items;
                 break;
             case "GET /items/{id}":
                 query = await dynamo.send(new GetCommand({
-                    TableName: DYNAMODB_TABLE,
+                    TableName: TABLE_CONTENT,
                     Key: { id: event.pathParameters.id }
                 }));
                 body = query.Item;
                 break;
             case "DELETE /items/{id}":
                 await dynamo.send(new DeleteCommand({
-                    TableName: DYNAMODB_TABLE,
+                    TableName: TABLE_CONTENT,
                     Key: { id: event.pathParameters.id }
                 }));
                 body = `Deleted item ${event.pathParameters.id}`;
