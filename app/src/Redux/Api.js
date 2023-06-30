@@ -4,6 +4,13 @@ const reducerPath = "api";
 const { REACT_APP_API_ENDPOINT } = process.env;
 
 const endpoints = (builder) => ({
+    getToken: builder.query({
+        query: ({ email, code }) => ({
+            url: `/auth`,
+            method: 'POST',
+            body: { email, code }
+        })
+    }),
     getPosts: builder.query({
         query: () => `/items`,
         providesTags: ['Post']
@@ -24,6 +31,7 @@ export const apiSvc = createApi({
 });
 
 export const {
+    useLazyGetTokenQuery,
     useGetPostsQuery,
     useGetPostQuery
 } = apiSvc;

@@ -1,0 +1,11 @@
+form {
+    margin-top: 10px;
+}
+
+form > * {
+    margin: 5px 0px;
+}
+
+form input[type=submit] {
+    margin-top: 15px;
+}

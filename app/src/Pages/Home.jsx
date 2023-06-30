@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useGetPostsQuery } from '../Api';
+import { useGetPostsQuery } from '../Redux/Api';
 import Main from '../Layouts/Main';
 import Spinner from '../Components/Spinner';
 
