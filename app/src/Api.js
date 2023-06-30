@@ -12,7 +12,7 @@ const endpoints = (builder) => ({
         query: (postid) => `/items/${postid}`,
         providesTags: (res, err, postid) => [{ type: 'Post', id: postid }]
     })
-})
+});
 
 export const apiSvc = createApi({
     reducerPath,

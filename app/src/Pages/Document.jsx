@@ -10,7 +10,8 @@ export default function Document() {
 
   return <Main>
     {!postLoading && <React.Fragment>
-      <pre>{JSON.stringify(postData, null, 4)}</pre>
+      <h2>{postData.title}</h2>
+      <div dangerouslySetInnerHTML={{ __html: postData.content }} />
     </React.Fragment>}
   </Main>
 
