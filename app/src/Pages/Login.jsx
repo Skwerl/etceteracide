@@ -23,8 +23,13 @@ export default function Login() {
     getToken({ email: thing1, code: thing2 });
   }
 
-  useEffect(() => { if (tokenResponse) dispatch(setToken(tokenResponse)); }, [tokenResponse]);
-  useEffect(() => { if (!!token && !!sessionId) navigate("/"); }, [token, sessionId]);
+  useEffect(() => {
+    if (tokenResponse) dispatch(setToken(tokenResponse));
+  }, [tokenResponse]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (!!token && !!sessionId) navigate("/");
+  }, [token, sessionId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return <Centered>
     Please provide the seeds of your own destruction.
