@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useGetPostsQuery } from '../Api';
 import Main from '../Layouts/Main';
 
@@ -8,8 +9,13 @@ export default function Home() {
 
   return <Main>
     {!postsLoading && <React.Fragment>
-      <pre>{JSON.stringify(postsData, null, 4)}</pre>
+      <ul>
+        {postsData.map((post, index) => <li key={index}>
+          <Link to={`/document/${post.id}`}>{post.title}</Link>
+        </li>)}
+      </ul>
     </React.Fragment>}
+
   </Main>
 
 }

@@ -6,8 +6,11 @@ const { REACT_APP_API_ENDPOINT } = process.env;
 const endpoints = (builder) => ({
     getPosts: builder.query({
         query: () => `/items`,
-        providesTags: ['Post'],
-        // providesTags: (res, err, orderCode) => [{ type: 'Order', id: orderCode }],
+        providesTags: ['Post']
+    }),
+    getPost: builder.query({
+        query: (postid) => `/items/${postid}`,
+        providesTags: (res, err, postid) => [{ type: 'Post', id: postid }]
     })
 })
 
@@ -21,5 +24,6 @@ export const apiSvc = createApi({
 });
 
 export const {
-    useGetPostsQuery
+    useGetPostsQuery,
+    useGetPostQuery
 } = apiSvc;

@@ -1,33 +1,6 @@
 {
-  "short_name": "OhWaiter Checkout",
-  "name": "OhWwaiter Order Checkout",
-  "icons": [
-    {
-      "src": "favicon.ico",
-      "sizes": "16x16 24x24 32x32 64x64",
-      "type": "image/x-icon"
-    },
-    {
-      "src": "favicon-16x16.png",
-      "type": "image/png",
-      "sizes": "16x16"
-    },
-    {
-      "src": "favicon-32x32.png",
-      "type": "image/png",
-      "sizes": "32x32"
-    },
-    {
-      "src": "android-chrome-192x192.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "android-chrome-512x512.png",
-      "type": "image/png",
-      "sizes": "512x512"
-    }
-  ],
+  "short_name": "ETCETERACIDE",
+  "name": "E T C E T E R A C I D E",
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
