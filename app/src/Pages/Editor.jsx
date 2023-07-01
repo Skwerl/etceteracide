@@ -21,7 +21,7 @@ export default function Editor() {
     }
   };
 
-  return <Main>
+  return <Main auth={true}>
     <HTMLEditor
       apiKey={REACT_APP_TINYMCE_KEY}
       onInit={(evt, editor) => editorRef.current = editor}
