@@ -1,27 +1,52 @@
 import { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Editor as HTMLEditor } from '@tinymce/tinymce-react';
-import { useGetPostQuery } from '../Redux/Api';
+import shortid from 'shortid';
+import { useGetPostQuery, useSavePostMutation } from '../Redux/Api';
 import Main from '../Layouts/Main';
-// import Spinner from '../Components/Spinner';
+import './Editor.css';
 
 const { REACT_APP_TINYMCE_KEY } = process.env;
 
 export default function Editor() {
 
   let { id } = useParams();
+  const navigate = useNavigate();
+  const titleRef = useRef(null);
   const editorRef = useRef(null);
+  const [editId, setEditId] = useState(undefined);
   const [existingContent, setExistingContent] = useState(undefined);
   const { data: postData = null, isLoading: postLoading } = useGetPostQuery(id, { skip: !!!id });
-  useEffect(() => { if (postData && postData.content) setExistingContent(postData.content); }, [postData]);
+  const [savePost] = useSavePostMutation();
+  useEffect(() => { if (!editId) setEditId(shortid()) }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const save = () => {
+  useEffect(() => {
+    if (postData) {
+      if (postData.id) setEditId(postData.id);
+      if (postData.content) setExistingContent(postData.content);
+      if (postData.title) titleRef.current.value = postData.title;
+    }
+  }, [postData]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const save = async () => {
     if (editorRef.current) {
-      console.log(editorRef.current.getContent());
+      const postObject = {
+        id: editId,
+        title: !!titleRef.current.value ? titleRef.current.value : "Untitled",
+        content: editorRef.current.getContent()
+      };
+      await savePost(postObject)
+        .then(() => console.log("Saved!"))
+        .catch((err) => console.error(err));
     }
   };
 
   return <Main auth={true}>
+    <div style={{ marginBottom: "20px" }}>
+      <form className="editorForm">
+        <input type="text" id="title" ref={titleRef} />
+      </form>
+    </div>
     <HTMLEditor
       apiKey={REACT_APP_TINYMCE_KEY}
       onInit={(evt, editor) => editorRef.current = editor}

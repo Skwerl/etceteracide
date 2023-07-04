@@ -28,7 +28,7 @@ export default function Login() {
   }, [tokenResponse]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (!!token && !!sessionId) navigate("/");
+    if (!!token && !!sessionId) navigate("/edit");
   }, [token, sessionId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return <Centered>

@@ -1,0 +1,11 @@
+.document-list a {
+    text-decoration: none;
+}
+
+.document-list li:not(:last-child) {
+    margin-bottom: 6px;
+}
+
+.document-wrapper {
+    padding-right: 30px;
+}

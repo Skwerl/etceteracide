@@ -22,6 +22,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
+p {
+  line-height: 1.5em;
+  text-align: justify;
+}
+
 input {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
   text-align: center;

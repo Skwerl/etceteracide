@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Spinner from '../Components/Spinner';
 import { LOGOUT_TIMER } from '../Constants';
+import './Main.css';
 
 export default function Main(props) {
 
@@ -14,7 +15,7 @@ export default function Main(props) {
     useEffect(() => {
         const timer = setTimeout(() => { if (!!auth && !!!token) navigate("/login"); }, LOGOUT_TIMER);
         return () => clearTimeout(timer);
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         if (!!token && !!sessionId) setLoggedIn(true);

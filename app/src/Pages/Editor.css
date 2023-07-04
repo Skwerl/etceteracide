@@ -1,0 +1,11 @@
+.editorForm {
+    margin: 0;
+    padding: 0;
+}
+.editorForm input {
+    width: calc(100% - 44px);
+    border: 2px solid #000;
+    padding: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}

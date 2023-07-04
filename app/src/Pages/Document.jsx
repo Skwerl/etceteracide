@@ -10,13 +10,15 @@ export default function Document() {
   const { data: postData = null, isLoading: postLoading } = useGetPostQuery(id);
 
   return <Main>
-    {postLoading
-      ? <Spinner />
-      : <React.Fragment>
-        <h2>{postData.title}</h2>
-        <div dangerouslySetInnerHTML={{ __html: postData.content }} />
-      </React.Fragment>
-    }
+    <div className="document-wrapper">
+      {postLoading
+        ? <Spinner />
+        : <React.Fragment>
+          <h2>{postData.title}</h2>
+          <div dangerouslySetInnerHTML={{ __html: postData.content }} />
+        </React.Fragment>
+      }
+    </div>
   </Main>
 
 }
