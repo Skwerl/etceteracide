@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Spinner from '../Components/Spinner';
+import { LOGOUT_TIMER } from '../Constants';
 
 export default function Main(props) {
 
@@ -9,6 +10,11 @@ export default function Main(props) {
     const navigate = useNavigate();
     const [loggedIn, setLoggedIn] = useState(false);
     const { token, sessionId } = useSelector((state) => state.tokenReducer);
+
+    useEffect(() => {
+        const timer = setTimeout(() => { if (!!auth && !!!token) navigate("/login"); }, LOGOUT_TIMER);
+        return () => clearTimeout(timer);
+    }, []);
 
     useEffect(() => {
         if (!!token && !!sessionId) setLoggedIn(true);
