@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Editor as HTMLEditor } from '@tinymce/tinymce-react';
 import shortid from 'shortid';
 import { useGetPostQuery, useSavePostMutation } from '../Redux/Api';
@@ -11,20 +11,25 @@ const { REACT_APP_TINYMCE_KEY } = process.env;
 export default function Editor() {
 
   let { id } = useParams();
-  const navigate = useNavigate();
   const titleRef = useRef(null);
   const editorRef = useRef(null);
   const [editId, setEditId] = useState(undefined);
+  const [postDate, setPostDate] = useState(undefined);
   const [existingContent, setExistingContent] = useState(undefined);
   const { data: postData = null, isLoading: postLoading } = useGetPostQuery(id, { skip: !!!id });
   const [savePost] = useSavePostMutation();
-  useEffect(() => { if (!editId) setEditId(shortid()) }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (!editId) setEditId(shortid());
+    if (!postDate) setPostDate(new Date().toISOString());
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (postData) {
       if (postData.id) setEditId(postData.id);
+      if (postData.date) setPostDate(postData.date);
       if (postData.content) setExistingContent(postData.content);
-      if (postData.title) titleRef.current.value = postData.title;
+      if (titleRef && postData.title) titleRef.current.value = postData.title;
     }
   }, [postData]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -32,6 +37,7 @@ export default function Editor() {
     if (editorRef.current) {
       const postObject = {
         id: editId,
+        date: postDate,
         title: !!titleRef.current.value ? titleRef.current.value : "Untitled",
         content: editorRef.current.getContent()
       };
