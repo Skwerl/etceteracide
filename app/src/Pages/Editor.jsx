@@ -11,13 +11,13 @@ export default function Editor() {
 
   let { id } = useParams();
   const editorRef = useRef(null);
-  const [editorContent, setEditorContent] = useState("");
+  const [existingContent, setExistingContent] = useState(undefined);
   const { data: postData = null, isLoading: postLoading } = useGetPostQuery(id, { skip: !!!id });
-  useEffect(() => { if (postData && postData.content) setEditorContent(postData.content); }, [postData]);
+  useEffect(() => { if (postData && postData.content) setExistingContent(postData.content); }, [postData]);
 
   const save = () => {
     if (editorRef.current) {
-      setEditorContent(editorRef.current.getContent());
+      console.log(editorRef.current.getContent());
     }
   };
 
@@ -25,7 +25,7 @@ export default function Editor() {
     <HTMLEditor
       apiKey={REACT_APP_TINYMCE_KEY}
       onInit={(evt, editor) => editorRef.current = editor}
-      value={editorContent}
+      initialValue={existingContent}
       disabled={postLoading}
       init={{
         height: 500,
@@ -35,11 +35,10 @@ export default function Editor() {
           'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
           'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
         ],
-        toolbar: 'undo redo | blocks | ' +
-          'bold italic forecolor | alignleft aligncenter ' +
+        toolbar: 'undo redo | bold italic | alignleft aligncenter ' +
           'alignright alignjustify | bullist numlist outdent indent | ' +
           'removeformat | help',
-        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+        content_style: 'body { font-family: Helvetica, Arial, sans-serif; font-size: 14px }'
       }}
     />
     <div style={{ marginTop: "20px" }}>
