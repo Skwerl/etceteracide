@@ -15,6 +15,7 @@ export default function Editor() {
   const editorRef = useRef(null);
   const [editId, setEditId] = useState(undefined);
   const [postDate, setPostDate] = useState(undefined);
+  const [postTitle, setPostTitle] = useState(undefined);
   const [existingContent, setExistingContent] = useState(undefined);
   const { data: postData = null, isLoading: postLoading } = useGetPostQuery(id, { skip: !!!id });
   const [savePost] = useSavePostMutation();
@@ -25,13 +26,18 @@ export default function Editor() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (postData) {
+    if (postData && titleRef) {
       if (postData.id) setEditId(postData.id);
       if (postData.date) setPostDate(postData.date);
+      if (postData.title) setPostTitle(postData.title);
       if (postData.content) setExistingContent(postData.content);
-      if (titleRef && postData.title) titleRef.current.value = postData.title;
+      if (postData.title && titleRef.current) titleRef.current.value = postData.title;
     }
   }, [postData]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (postTitle && titleRef.current) titleRef.current.value = postTitle;
+  }, [postTitle, titleRef]);
 
   const save = async () => {
     if (editorRef.current) {
