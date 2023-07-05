@@ -2,6 +2,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-size: 12pt;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -22,8 +23,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
+small {
+  font-size: 10pt;
+}
+
 p {
-  line-height: 1.5em;
+  font-size: 13pt;
+  line-height: 1.6em;
   text-align: justify;
 }
 
