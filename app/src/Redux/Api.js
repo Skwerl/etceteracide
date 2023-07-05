@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { redux } from './Store';
+import { Store } from './Store';
 
 const reducerPath = "api";
 const { REACT_APP_API_ENDPOINT } = process.env;
@@ -14,7 +14,7 @@ const endpoints = (builder) => ({
     }),
     getPosts: builder.query({
         query: () => `/items`,
-        providesTags: ['Post']
+        providesTags: ['Posts']
     }),
     getPost: builder.query({
         query: (id) => `/items/${id}`,
@@ -26,17 +26,17 @@ const endpoints = (builder) => ({
             method: 'PUT',
             body: postObject
         }),
-        invalidatesTags: (res, err, { id }) => [{ type: 'Post', id }]
+        invalidatesTags: (res, err, { id }) => ['Posts', { type: 'Post', id }]
     })
 });
 
 export const apiSvc = createApi({
     reducerPath,
-    tagTypes: ["Post"],
+    tagTypes: ['Posts', 'Post'],
     baseQuery: fetchBaseQuery({
         baseUrl: REACT_APP_API_ENDPOINT,
         prepareHeaders: async (headers) => {
-            const { token, sessionId } = redux.getState().tokenReducer;
+            const { token, sessionId } = Store.getState().tokenReducer;
             headers.set('Authorization', token);
             headers.set('SessionId', sessionId);
             return headers;

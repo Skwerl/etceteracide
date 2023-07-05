@@ -3,7 +3,7 @@ import { setupListeners } from '@reduxjs/toolkit/query';
 import { apiSvc } from './Api';
 import tokenReducer from './Slices';
 
-export const redux = configureStore({
+export const Store = configureStore({
     reducer: {
         [apiSvc.reducerPath]: apiSvc.reducer,
         tokenReducer
@@ -13,4 +13,4 @@ export const redux = configureStore({
     )
 });
 
-setupListeners(redux.dispatch);
+setupListeners(Store.dispatch);
