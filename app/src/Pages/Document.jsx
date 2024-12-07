@@ -24,8 +24,8 @@ export default function Document() {
           <h2>{postData.title}</h2>
           <div dangerouslySetInnerHTML={{ __html: postData.content }} />
           <small>{dateString
-            ? `Skwerl, ${dateString}`
-            : `Skwerl`
+            ? `${postData.author}, ${dateString}`
+            : `${postData.author}`
           }</small>
         </React.Fragment>
       }
