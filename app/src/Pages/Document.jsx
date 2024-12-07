@@ -7,10 +7,12 @@ import Spinner from '../Components/Spinner';
 export default function Document() {
 
   let { id } = useParams();
-  const [dateString, setDateString] = useState(null);
+  const [dateString, setDateString] = useState('Date Unknown');
+  const [authorName, setAuthorName] = useState('Unknown Author');
   const { data: postData = null, isLoading: postLoading } = useGetPostQuery(id);
 
   useEffect(() => {
+    if (postData && postData.author) setAuthorName(postData.author);
     if (postData && postData.date) {
       setDateString(new Date(postData.date).toLocaleDateString('en-US'));
     }
@@ -21,12 +23,23 @@ export default function Document() {
       {postLoading
         ? <Spinner />
         : <React.Fragment>
-          <h2>{postData.title}</h2>
+
+          {postData.antiquiet
+            ? <React.Fragment>
+              <p className="header antiquiet">
+                <h2 className="title">{postData.title}</h2>
+                <strong>{`Originally published on Antiquiet.com by ${authorName}, ${dateString}`}</strong>
+              </p>
+            </React.Fragment>
+            : <React.Fragment>
+              <p className="header">
+                <h2 className="title">{postData.title}</h2>
+              </p>
+            </React.Fragment>}
+
           <div dangerouslySetInnerHTML={{ __html: postData.content }} />
-          <small>{dateString
-            ? `${postData.author}, ${dateString}`
-            : `${postData.author}`
-          }</small>
+          <small>{`${authorName}, ${dateString}`}</small>
+
         </React.Fragment>
       }
     </div>
