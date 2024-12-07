@@ -49,7 +49,12 @@ export const handler = async (event, context) => {
                     token += cipher.final("hex");
                     authorized = true;
                 }
-                body = { authorized, token, sessionId };
+                const user = {
+                    id: found.id,
+                    name: found.name,
+                    email: found.email
+                };
+                body = { authorized, token, sessionId, user };
                 break;
             case "PUT /items":
                 req = JSON.parse(event.body);

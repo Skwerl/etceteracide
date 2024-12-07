@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Editor as HTMLEditor } from '@tinymce/tinymce-react';
 import shortid from 'shortid';
 import { useGetPostQuery, useSavePostMutation } from '../Redux/Api';
@@ -17,6 +18,7 @@ export default function Editor() {
   const [postDate, setPostDate] = useState(undefined);
   const [postTitle, setPostTitle] = useState(undefined);
   const [existingContent, setExistingContent] = useState(undefined);
+  const { user } = useSelector((state) => state.tokenReducer);
   const { data: postData = null, isLoading: postLoading } = useGetPostQuery(id, { skip: !!!id });
   const [savePost] = useSavePostMutation();
 
@@ -44,6 +46,7 @@ export default function Editor() {
       const postObject = {
         id: editId,
         date: postDate,
+        author: !!user.name ? user.name : "Unknown Author",
         title: !!titleRef.current.value ? titleRef.current.value : "Untitled",
         content: editorRef.current.getContent()
       };

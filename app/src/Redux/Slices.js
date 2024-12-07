@@ -4,13 +4,15 @@ export const tokenSlice = createSlice({
     name: "tokenSlice",
     initialState: {
         token: null,
-        sessionId: null
+        sessionId: null,
+        user: null
     },
     reducers: {
         setToken: (state, action) => {
-            const { token, sessionId } = action.payload;
+            const { token, sessionId, user } = action.payload;
             state.token = token;
             state.sessionId = sessionId;
+            state.user = user;
         }
     }
 });
