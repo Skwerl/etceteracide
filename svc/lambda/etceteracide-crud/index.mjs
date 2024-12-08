@@ -4,7 +4,7 @@ import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import { ScanCommand, GetCommand, PutCommand, DeleteCommand } from "@aws-sdk/lib-dynamodb";
 import { authenticator } from "otplib";
 
-const { DYNAMODB_ENDPOINT, TABLE_CONTENT, TABLE_SESSIONS, TABLE_USERS, CRYPTO_KEY_HEX } = process.env;
+const { DYNAMODB_ENDPOINT, TABLE_CONTENT, TABLE_AQ_ATTACHMENTS, TABLE_SESSIONS, TABLE_USERS, CRYPTO_KEY_HEX } = process.env;
 const CRYPTO_KEY = Buffer.from(CRYPTO_KEY_HEX, "hex");
 
 export const handler = async (event, context) => {
@@ -85,6 +85,13 @@ export const handler = async (event, context) => {
                     Key: { id: event.pathParameters.id }
                 }));
                 body = `Deleted item ${event.pathParameters.id}`;
+                break;
+            case "GET /images/{id}":
+                query = await dynamo.send(new GetCommand({
+                    TableName: TABLE_AQ_ATTACHMENTS,
+                    Key: { id: event.pathParameters.id }
+                }));
+                body = query.Item;
                 break;
             default:
                 throw new Error(`Unsupported route: "${event.routeKey}"`);

@@ -20,6 +20,10 @@ const endpoints = (builder) => ({
         query: (id) => `/items/${id}`,
         providesTags: (res, err, id) => [{ type: 'Post', id }]
     }),
+    getAttachment: builder.query({
+        query: (id) => `/images/${id}`,
+        providesTags: (res, err, id) => [{ type: 'AQFile', id }]
+    }),
     savePost: builder.mutation({
         query: (postObject) => ({
             url: `/items`,
@@ -32,7 +36,7 @@ const endpoints = (builder) => ({
 
 export const apiSvc = createApi({
     reducerPath,
-    tagTypes: ['Posts', 'Post'],
+    tagTypes: ['Posts', 'Post', 'AQFile'],
     baseQuery: fetchBaseQuery({
         baseUrl: REACT_APP_API_ENDPOINT,
         prepareHeaders: async (headers) => {
@@ -49,5 +53,6 @@ export const {
     useLazyGetTokenQuery,
     useGetPostsQuery,
     useGetPostQuery,
+    useGetAttachmentQuery,
     useSavePostMutation
 } = apiSvc;
