@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
-import { ScanCommand, QueryCommand, PutCommand, DeleteCommand } from "@aws-sdk/lib-dynamodb";
+import { ScanCommand, GetCommand, PutCommand, DeleteCommand } from "@aws-sdk/lib-dynamodb";
 import { authenticator } from "otplib";
 
 const { DYNAMODB_ENDPOINT, TABLE_CONTENT, TABLE_SESSIONS, TABLE_USERS, CRYPTO_KEY_HEX } = process.env;
@@ -73,14 +73,11 @@ export const handler = async (event, context) => {
                 body = query.Items;
                 break;
             case "GET /items/{id}":
-                query = await dynamo.send(new QueryCommand({
+                query = await dynamo.send(new GetCommand({
                     TableName: TABLE_CONTENT,
-                    KeyConditionExpression: "id = :id",
-                    ExpressionAttributeValues: {
-                        ":id": event.pathParameters.id
-                    }
+                    Key: { id: event.pathParameters.id }
                 }));
-                body = query.Items[0];
+                body = query.Item;
                 break;
             case "DELETE /items/{id}":
                 await dynamo.send(new DeleteCommand({
