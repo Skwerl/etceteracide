@@ -2,7 +2,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
-  font-size: 12pt;
+  font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -24,11 +24,11 @@ code {
 }
 
 small {
-  font-size: 10pt;
+  font-size: 12px;
 }
 
 p {
-  font-size: 13pt;
+  font-size: 16px;
   line-height: 1.6em;
   text-align: justify;
 }
@@ -57,10 +57,11 @@ button {
 }
 
 h1 {
-  font-size: 2.2em;
+  font-size: 36px;
 }
 h2 {
-  font-size: 3em;
+  font-size: 44px;
+  line-height: 1em;
 }
 h2.title {
   margin-bottom: 20px;
@@ -68,4 +69,23 @@ h2.title {
 
 p.header {
   margin-bottom: 40px;
+}
+
+@media screen and (max-width: 768px) {
+  body,
+  p,
+  h1,
+  h2 {
+    text-align: initial;
+  }
+  h1 {
+    font-size: 32px;
+  }
+  h2 {
+    font-size: 52px;
+  }
+  body,
+  p {
+    font-size: 16px;
+  }
 }
