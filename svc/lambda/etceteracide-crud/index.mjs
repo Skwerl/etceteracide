@@ -1,10 +1,10 @@
 import crypto from 'crypto';
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
-import { ScanCommand, GetCommand, PutCommand, DeleteCommand } from "@aws-sdk/lib-dynamodb";
+import { ScanCommand, BatchGetCommand, GetCommand, PutCommand, DeleteCommand } from "@aws-sdk/lib-dynamodb";
 import { authenticator } from "otplib";
 
-const { DYNAMODB_ENDPOINT, TABLE_CONTENT, TABLE_AQ_ATTACHMENTS, TABLE_SESSIONS, TABLE_USERS, CRYPTO_KEY_HEX } = process.env;
+const { DYNAMODB_ENDPOINT, TABLE_CONTENT, TABLE_PAGES, TABLE_USERS, TABLE_SESSIONS, TABLE_AQ_ATTACHMENTS, CRYPTO_KEY_HEX } = process.env;
 const CRYPTO_KEY = Buffer.from(CRYPTO_KEY_HEX, "hex");
 
 export const handler = async (event, context) => {
@@ -71,6 +71,21 @@ export const handler = async (event, context) => {
                     TableName: TABLE_CONTENT
                 }));
                 body = query.Items;
+                break;
+            case "GET /items/page/{id}":
+                query = await dynamo.send(new GetCommand({
+                    TableName: TABLE_PAGES,
+                    Key: { id: event.pathParameters.id }
+                }));
+                const pageDocs = query.Item['documents'];
+                const itemRequest = {};
+                itemRequest[TABLE_CONTENT] = {
+                    Keys: pageDocs.map(doc => { return { id: doc } })
+                };
+                query = await dynamo.send(new BatchGetCommand({
+                    RequestItems: { ...itemRequest }
+                }));
+                body = query['Responses'][TABLE_CONTENT];
                 break;
             case "GET /items/{id}":
                 query = await dynamo.send(new GetCommand({
