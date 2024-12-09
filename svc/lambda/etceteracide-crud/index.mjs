@@ -11,19 +11,19 @@ const CRYPTO_KEY = Buffer.from(CRYPTO_KEY_HEX, "hex");
 const pageSize = 40;
 const splitFunction = (n, xs, y = []) => xs.length === 0 ? y : splitFunction(n, xs.slice(n), y.concat([xs.slice(0, n)]));
 
-export const scanFullTable = async (client, tableName, attrs) => {
+const scanFullTable = async (client, table, attrs) => {
     const params = {
-        TableName: tableName,
+        TableName: table,
         AttributesToGet: attrs
     };
-    const scanResults = [];
-    let items;
+    const results = [];
+    let scan;
     do {
-        items = await client.send(new ScanCommand(params));
-        items.Items.forEach((item) => scanResults.push(item));
-        params.ExclusiveStartKey = items.LastEvaluatedKey;
-    } while (typeof items.LastEvaluatedKey !== "undefined");
-    return scanResults;
+        scan = await client.send(new ScanCommand(params));
+        scan.Items.forEach((item) => results.push(item));
+        params.ExclusiveStartKey = scan.LastEvaluatedKey;
+    } while (typeof scan.LastEvaluatedKey !== "undefined");
+    return results;
 };
 
 export const handler = async (event, context) => {
