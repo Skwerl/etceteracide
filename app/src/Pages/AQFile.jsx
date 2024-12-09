@@ -10,7 +10,7 @@ export default function AQFile() {
   const { data: postData = null, isLoading: postLoading } = useGetAttachmentQuery(id);
 
   return <Main>
-    <div className="document-wrapper">
+    <div className="content-wrapper document-wrapper">
       {postLoading
         ? <Spinner />
         : <React.Fragment>

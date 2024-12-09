@@ -1,0 +1,9 @@
+@media screen and (max-width: 768px) {
+    .header.antiquiet > strong {
+        font-size: 14px;
+    }
+    .content-wrapper.document-wrapper img {
+        max-width: 100%;
+        height: auto;
+    }
+}

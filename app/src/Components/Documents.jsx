@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { SlNote } from "react-icons/sl";
-import { useGetPostsQuery } from '../Redux/Api';
+import { useGetPostsByPageQuery } from '../Redux/Api';
 import Spinner from '../Components/Spinner';
 
 export default function Documents(props) {
 
   const { page } = props;
   const { sessionId: loggedIn } = useSelector((state) => state.tokenReducer);
-  const { data: postsData = null, isLoading: postsLoading } = useGetPostsQuery();
+  const { data: postsData = null, isLoading: postsLoading } = useGetPostsByPageQuery(page);
   const [sortedPosts, setSortedPosts] = useState([]);
 
   useEffect(() => {

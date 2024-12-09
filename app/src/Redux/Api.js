@@ -16,6 +16,10 @@ const endpoints = (builder) => ({
         query: () => `/items`,
         providesTags: ['Documents']
     }),
+    getPostsByPage: builder.query({
+        query: (id) => `/items/page/${id}`,
+        providesTags: ['Pages']
+    }),
     getPost: builder.query({
         query: (id) => `/items/${id}`,
         providesTags: (res, err, id) => [{ type: 'Document', id }]
@@ -56,6 +60,7 @@ export const apiSvc = createApi({
 export const {
     useLazyGetTokenQuery,
     useGetPostsQuery,
+    useGetPostsByPageQuery,
     useGetPostQuery,
     useGetAttachmentQuery,
     useSavePostMutation,

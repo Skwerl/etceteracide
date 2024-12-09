@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useGetPostQuery } from '../Redux/Api';
 import Main from '../Layouts/Main';
 import Spinner from '../Components/Spinner';
+import './Document.css';
 
 export default function Document() {
 
@@ -19,7 +20,7 @@ export default function Document() {
   }, [postData]);
 
   return <Main>
-    <div className="document-wrapper">
+    <div className="content-wrapper document-wrapper">
       {postLoading
         ? <Spinner />
         : <React.Fragment>

@@ -77,6 +77,22 @@ div.header.antiquiet h2 {
   margin-bottom: 14px;
 }
 
+.content-wrapper a {
+  color: #000;
+  text-decoration: none;
+}
+.content-wrapper a:hover,
+.content-wrapper a:active {
+  text-decoration: underline;
+}
+.content-wrapper a:visited {
+  color: #666;
+  text-decoration: none;
+}
+.document-wrapper a {
+  text-decoration: underline;
+}
+
 @media screen and (max-width: 768px) {
   body,
   p,

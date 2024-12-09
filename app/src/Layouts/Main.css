@@ -1,11 +1,16 @@
-.document-list a {
-    text-decoration: none;
-}
-
 .document-list li:not(:last-child) {
     margin-bottom: 6px;
 }
 
 .document-wrapper {
     padding-right: 15px;
+}
+
+@media screen and (max-width: 768px) {
+    .document-list {
+        padding-left: 24px;
+    }
+    .document-list li:not(:last-child) {
+        margin-bottom: 16px;
+    }
 }

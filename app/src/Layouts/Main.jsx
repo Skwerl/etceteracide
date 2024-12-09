@@ -22,7 +22,7 @@ export default function Main(props) {
     }, [token, sessionId]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return <React.Fragment>
-        <div style={{ margin: "20px 30px" }}>
+        <div style={{ margin: "20px 30px" }} className="main-wrapper">
             <h1><Link to="/">E T C E T E R A C I D E</Link></h1>
             {(!auth || loggedIn)
                 ? children
