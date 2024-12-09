@@ -7,7 +7,7 @@ import { useGetPostQuery, useSavePostMutation, useLazyIndexPostsQuery } from '..
 import Main from '../Layouts/Main';
 import './Editor.css';
 
-const { REACT_APP_TINYMCE_KEY } = process.env;
+const { VITE_TINYMCE_KEY } = import.meta.env;
 
 export default function Editor() {
 
@@ -65,7 +65,7 @@ export default function Editor() {
       </form>
     </div>
     <HTMLEditor
-      apiKey={REACT_APP_TINYMCE_KEY}
+      apiKey={VITE_TINYMCE_KEY}
       onInit={(evt, editor) => editorRef.current = editor}
       initialValue={existingContent}
       disabled={postLoading}

@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Store } from './Store';
 
 const reducerPath = "api";
-const { REACT_APP_API_ENDPOINT } = process.env;
+const { VITE_API_ENDPOINT } = import.meta.env;
 
 const endpoints = (builder) => ({
     getToken: builder.query({
@@ -42,7 +42,7 @@ export const apiSvc = createApi({
     reducerPath,
     tagTypes: ['Pages', 'Documents', 'Document', 'AQFile'],
     baseQuery: fetchBaseQuery({
-        baseUrl: REACT_APP_API_ENDPOINT,
+        baseUrl: VITE_API_ENDPOINT,
         prepareHeaders: async (headers) => {
             const { token, sessionId } = Store.getState().tokenReducer;
             headers.set('Authorization', token);
