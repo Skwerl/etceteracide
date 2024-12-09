@@ -8,8 +8,23 @@ const { DYNAMODB_ENDPOINT, TABLE_CONTENT, TABLE_PAGES, TABLE_USERS, TABLE_SESSIO
 const CRYPTO_KEY = Buffer.from(CRYPTO_KEY_HEX, "hex");
 
 // Used for Document Indexing
-const pageSize = 50;
+const pageSize = 40;
 const splitFunction = (n, xs, y = []) => xs.length === 0 ? y : splitFunction(n, xs.slice(n), y.concat([xs.slice(0, n)]));
+
+export const scanFullTable = async (client, tableName, attrs) => {
+    const params = {
+        TableName: tableName,
+        AttributesToGet: attrs
+    };
+    const scanResults = [];
+    let items;
+    do {
+        items = await client.send(new ScanCommand(params));
+        items.Items.forEach((item) => scanResults.push(item));
+        params.ExclusiveStartKey = items.LastEvaluatedKey;
+    } while (typeof items.LastEvaluatedKey !== "undefined");
+    return scanResults;
+};
 
 export const handler = async (event, context) => {
 
@@ -99,11 +114,8 @@ export const handler = async (event, context) => {
                 body = query.Item;
                 break;
             case "GET /items/index":
-                query = await dynamo.send(new ScanCommand({
-                    TableName: TABLE_CONTENT,
-                    AttributesToGet: ['id', 'date']
-                }));
-                const sortedItems = query.Items.sort(function(a, b) {
+                const fullScanItems = await scanFullTable(dynamo, TABLE_CONTENT, ['id', 'date']);
+                const sortedItems = fullScanItems.sort(function(a, b) {
                     return (a.date < b.date) ? -1 : ((a.date > b.date) ? 1 : 0);
                 }).reverse();
                 const splitItems = splitFunction(pageSize, sortedItems);
@@ -111,7 +123,7 @@ export const handler = async (event, context) => {
                     await dynamo.send(new PutCommand({
                         TableName: TABLE_PAGES,
                         Item: {
-                            id: (i+1).toString(),
+                            id: (i + 1).toString(),
                             documents: splitItems[i].map(d => d.id)
                         }
                     }));
