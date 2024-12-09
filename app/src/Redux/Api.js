@@ -59,5 +59,5 @@ export const {
     useGetPostQuery,
     useGetAttachmentQuery,
     useSavePostMutation,
-    useIndexPostsQuery
+    useLazyIndexPostsQuery
 } = apiSvc;

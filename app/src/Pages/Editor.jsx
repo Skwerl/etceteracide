@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Editor as HTMLEditor } from '@tinymce/tinymce-react';
 import shortid from 'shortid';
-import { useGetPostQuery, useSavePostMutation } from '../Redux/Api';
+import { useGetPostQuery, useSavePostMutation, useLazyIndexPostsQuery } from '../Redux/Api';
 import Main from '../Layouts/Main';
 import './Editor.css';
 
@@ -20,6 +20,7 @@ export default function Editor() {
   const [existingContent, setExistingContent] = useState(undefined);
   const { user } = useSelector((state) => state.tokenReducer);
   const { data: postData = null, isLoading: postLoading } = useGetPostQuery(id, { skip: !!!id });
+  const [indexPosts] = useLazyIndexPostsQuery();
   const [savePost] = useSavePostMutation();
 
   useEffect(() => {
@@ -53,6 +54,7 @@ export default function Editor() {
       await savePost(postObject)
         .then(() => console.log("Saved!"))
         .catch((err) => console.error(err));
+      indexPosts();
     }
   };
 
