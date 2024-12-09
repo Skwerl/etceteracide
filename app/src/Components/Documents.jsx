@@ -5,12 +5,23 @@ import { SlNote } from "react-icons/sl";
 import { useGetPostsByPageQuery } from '../Redux/Api';
 import Spinner from '../Components/Spinner';
 
-export default function Documents(props) {
+export default function Documents() {
 
-  const { page } = props;
+  const [page, setPage] = useState(1);
+  const [scrolledToEnd, setScrolledToEnd] = useState(false);
   const { sessionId: loggedIn } = useSelector((state) => state.tokenReducer);
-  const { data: postsData = null, isLoading: postsLoading } = useGetPostsByPageQuery(page);
+  const { data: postsData = null, isLoading: postsLoading, error: loadError } = useGetPostsByPageQuery(page);
   const [sortedPosts, setSortedPosts] = useState([]);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const scrolledToBottom =
+        window.innerHeight + window.scrollY >= document.body.offsetHeight;
+      if (scrolledToBottom && !postsLoading && !scrolledToEnd) setPage(page + 1);
+    };
+    document.addEventListener("scroll", onScroll);
+    return () => document.removeEventListener("scroll", onScroll);
+  }, [page, postsLoading]);
 
   useEffect(() => {
     if (postsData) {
@@ -20,10 +31,14 @@ export default function Documents(props) {
     }
   }, [postsData]);
 
+  useEffect(() => {
+    if (loadError && loadError.status === 400) setScrolledToEnd(true);
+  }, [loadError]);
+
   return <React.Fragment>
     {postsLoading
       ? <Spinner />
-      : <ul className={`document-list page-${page}`}>
+      : <ul className="document-list">
         {!!loggedIn && <li><Link to={`/edit`}><SlNote />{'\u00A0'}New</Link></li>}
         {sortedPosts.map((post, index) => <li key={index}>
           {!!loggedIn &&

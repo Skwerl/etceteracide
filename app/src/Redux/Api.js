@@ -16,10 +16,6 @@ const endpoints = (builder) => ({
         query: () => `/items`,
         providesTags: ['Documents']
     }),
-    getPostsByPage: builder.query({
-        query: (id) => `/items/page/${id}`,
-        providesTags: ['Pages']
-    }),
     getPost: builder.query({
         query: (id) => `/items/${id}`,
         providesTags: (res, err, id) => [{ type: 'Document', id }]
@@ -37,14 +33,25 @@ const endpoints = (builder) => ({
         invalidatesTags: (res, err, { id }) => ['Documents', { type: 'Document', id }]
     }),
     indexPosts: builder.query({
-        query: () => `/items/index`,
-        providesTags: ['Pages']
+        query: () => `/items/index`
+    }),
+    getPostsByPage: builder.query({
+        query: (id) => `/items/page/${id}`,
+        serializeQueryArgs: ({ endpointName }) => {
+            return endpointName
+        },
+        merge: (currentCache, newItems) => {
+            currentCache.push(...newItems)
+        },
+        forceRefetch({ currentArg, previousArg }) {
+            return currentArg !== previousArg
+        }
     })
 });
 
 export const apiSvc = createApi({
     reducerPath,
-    tagTypes: ['Pages', 'Documents', 'Document', 'AQFile'],
+    tagTypes: ['Documents', 'Document', 'AQFile'],
     baseQuery: fetchBaseQuery({
         baseUrl: VITE_API_ENDPOINT,
         prepareHeaders: async (headers) => {
