@@ -14,11 +14,11 @@ const endpoints = (builder) => ({
     }),
     getPosts: builder.query({
         query: () => `/items`,
-        providesTags: ['Posts']
+        providesTags: ['Documents']
     }),
     getPost: builder.query({
         query: (id) => `/items/${id}`,
-        providesTags: (res, err, id) => [{ type: 'Post', id }]
+        providesTags: (res, err, id) => [{ type: 'Document', id }]
     }),
     getAttachment: builder.query({
         query: (id) => `/images/${id}`,
@@ -30,13 +30,17 @@ const endpoints = (builder) => ({
             method: 'PUT',
             body: postObject
         }),
-        invalidatesTags: (res, err, { id }) => ['Posts', { type: 'Post', id }]
+        invalidatesTags: (res, err, { id }) => ['Documents', { type: 'Document', id }]
+    }),
+    indexPosts: builder.query({
+        query: () => `/items/index`,
+        providesTags: ['Pages']
     })
 });
 
 export const apiSvc = createApi({
     reducerPath,
-    tagTypes: ['Posts', 'Post', 'AQFile'],
+    tagTypes: ['Pages', 'Documents', 'Document', 'AQFile'],
     baseQuery: fetchBaseQuery({
         baseUrl: REACT_APP_API_ENDPOINT,
         prepareHeaders: async (headers) => {
@@ -54,5 +58,6 @@ export const {
     useGetPostsQuery,
     useGetPostQuery,
     useGetAttachmentQuery,
-    useSavePostMutation
+    useSavePostMutation,
+    useIndexPostsQuery
 } = apiSvc;
