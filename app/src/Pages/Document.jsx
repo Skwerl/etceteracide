@@ -26,15 +26,15 @@ export default function Document() {
 
           {postData.antiquiet
             ? <React.Fragment>
-              <p className="header antiquiet">
+              <div className="header antiquiet">
                 <h2 className="title">{postData.title}</h2>
                 <strong>{`Originally published on Antiquiet.com by ${authorName}, ${dateString}`}</strong>
-              </p>
+              </div>
             </React.Fragment>
             : <React.Fragment>
-              <p className="header">
+              <div className="header">
                 <h2 className="title">{postData.title}</h2>
-              </p>
+              </div>
             </React.Fragment>}
 
           <div dangerouslySetInnerHTML={{ __html: postData.content }} />

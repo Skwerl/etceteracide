@@ -64,11 +64,17 @@ h2 {
   line-height: 1em;
 }
 h2.title {
-  margin-bottom: 20px;
+  margin-bottom: 14px;
 }
 
-p.header {
-  margin-bottom: 40px;
+div.header {
+  margin-bottom: 30px;
+}
+div.header h2 {
+  margin-bottom: 0;
+}
+div.header.antiquiet h2 {
+  margin-bottom: 14px;
 }
 
 @media screen and (max-width: 768px) {

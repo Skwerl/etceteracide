@@ -17,7 +17,7 @@ export default function AQFile() {
 
           <pre>{JSON.stringify(postData, null, 4)}</pre>
 
-          {postData && postData.file && <img src={postData.file} />}
+          {postData && postData.file && <img src={postData.file} alt={postData.title} />}
 
         </React.Fragment>
       }
