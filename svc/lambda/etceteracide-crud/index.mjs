@@ -8,7 +8,7 @@ const { DYNAMODB_ENDPOINT, TABLE_CONTENT, TABLE_PAGES, TABLE_USERS, TABLE_SESSIO
 const CRYPTO_KEY = Buffer.from(CRYPTO_KEY_HEX, "hex");
 
 // Used for Document Indexing
-const pageSize = 20;
+const pageSize = 50;
 const splitFunction = (n, xs, y = []) => xs.length === 0 ? y : splitFunction(n, xs.slice(n), y.concat([xs.slice(0, n)]));
 
 export const handler = async (event, context) => {
