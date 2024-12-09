@@ -7,6 +7,10 @@ import { authenticator } from "otplib";
 const { DYNAMODB_ENDPOINT, TABLE_CONTENT, TABLE_PAGES, TABLE_USERS, TABLE_SESSIONS, TABLE_AQ_ATTACHMENTS, CRYPTO_KEY_HEX } = process.env;
 const CRYPTO_KEY = Buffer.from(CRYPTO_KEY_HEX, "hex");
 
+// Used for Document Indexing
+const pageSize = 20;
+const splitFunction = (n, xs, y = []) => xs.length === 0 ? y : splitFunction(n, xs.slice(n), y.concat([xs.slice(0, n)]));
+
 export const handler = async (event, context) => {
 
     const client = new DynamoDBClient({ endpoint: DYNAMODB_ENDPOINT });
@@ -64,7 +68,7 @@ export const handler = async (event, context) => {
                         ...req
                     }
                 }));
-                body = `Put item ${req.id}`;
+                body = `Put item ${req.id}.`;
                 break;
             case "GET /items":
                 query = await dynamo.send(new ScanCommand({
@@ -94,6 +98,26 @@ export const handler = async (event, context) => {
                 }));
                 body = query.Item;
                 break;
+            case "GET /items/index":
+                query = await dynamo.send(new ScanCommand({
+                    TableName: TABLE_CONTENT,
+                    AttributesToGet: ['id', 'date']
+                }));
+                const sortedItems = query.Items.sort(function(a, b) {
+                    return (a.date < b.date) ? -1 : ((a.date > b.date) ? 1 : 0);
+                }).reverse();
+                const splitItems = splitFunction(pageSize, sortedItems);
+                for (let i = 0; i < splitItems.length; i++) {
+                    await dynamo.send(new PutCommand({
+                        TableName: TABLE_PAGES,
+                        Item: {
+                            id: (i+1).toString(),
+                            documents: splitItems[i].map(d => d.id)
+                        }
+                    }));
+                }
+                body = `Indexed ${splitItems.length} pages.`;
+                break;
             case "DELETE /items/{id}":
                 await dynamo.send(new DeleteCommand({
                     TableName: TABLE_CONTENT,
@@ -109,7 +133,7 @@ export const handler = async (event, context) => {
                 body = query.Item;
                 break;
             default:
-                throw new Error(`Unsupported route: "${event.routeKey}"`);
+                throw new Error(`Unsupported route: "${event.routeKey}".`);
         }
     } catch (err) {
         statusCode = 400;
