@@ -40,7 +40,7 @@ export default function Document() {
                   </div>
                 </React.Fragment>
               }
-              <div dangerouslySetInnerHTML={{ __html: postData.content }} />
+              <div className="document-body" dangerouslySetInnerHTML={{ __html: postData.content }} />
               <small>{`${authorName}, ${dateString}`}</small>
             </React.Fragment>
 
