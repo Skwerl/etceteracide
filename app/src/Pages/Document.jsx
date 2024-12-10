@@ -24,23 +24,31 @@ export default function Document() {
       {postLoading
         ? <Spinner />
         : <React.Fragment>
+          {(!!postData && !!postData.content)
 
-          {postData.antiquiet
             ? <React.Fragment>
-              <div className="header antiquiet">
-                <h2 className="title">{postData.title}</h2>
-                <strong>{`Originally published on Antiquiet.com by ${authorName}, ${dateString}`}</strong>
-              </div>
+              {!!postData.antiquiet
+                ? <React.Fragment>
+                  <div className="header antiquiet">
+                    <h2 className="title">{postData.title}</h2>
+                    <strong>{`Originally published on Antiquiet.com by ${authorName}, ${dateString}`}</strong>
+                  </div>
+                </React.Fragment>
+                : <React.Fragment>
+                  <div className="header">
+                    <h2 className="title">{postData.title}</h2>
+                  </div>
+                </React.Fragment>
+              }
+              <div dangerouslySetInnerHTML={{ __html: postData.content }} />
+              <small>{`${authorName}, ${dateString}`}</small>
             </React.Fragment>
+
             : <React.Fragment>
-              <div className="header">
-                <h2 className="title">{postData.title}</h2>
-              </div>
-            </React.Fragment>}
+              No content found here!
+            </React.Fragment>
 
-          <div dangerouslySetInnerHTML={{ __html: postData.content }} />
-          <small>{`${authorName}, ${dateString}`}</small>
-
+          }
         </React.Fragment>
       }
     </div>

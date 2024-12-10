@@ -15,7 +15,7 @@ export default function App() {
       <Route path="/document/:id" element={<Document />} />
       <Route path="/edit/:id?" element={<Editor />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/antiquiet*" element={<AQRedirect />} />
+      <Route path="/antiquiet/*" element={<AQRedirect />} />
       <Route path="/aq/:id" element={<AQFile />} />
 
     </Routes>
