@@ -9,6 +9,8 @@
 @media screen and (max-width: 768px) {
     .document-list {
         padding-left: 24px;
+        list-style-type: none;
+        padding-left: 1px;
     }
     .document-list li:not(:last-child) {
         margin-bottom: 16px;
