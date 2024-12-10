@@ -40,7 +40,7 @@ export default function Documents() {
             <React.Fragment>
               <Link to={`/edit/${post.id}`}><SlNote /></Link>{'\u00A0'}
             </React.Fragment>}
-          <Link to={`/document/${post.id}`}>{post.title}</Link>
+          <Link to={`/document/${post.id}`}>{!!post.title ? post.title : 'No Title'}</Link>
         </li>)}
       </ul>
     }
