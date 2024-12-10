@@ -25,9 +25,14 @@ export default function Documents() {
 
   useEffect(() => {
     if (postsData) {
-      setSortedPosts([...postsData].sort(function (a, b) {
+      const orderedPosts = [...postsData].sort(function (a, b) {
         return (a.date < b.date) ? -1 : ((a.date > b.date) ? 1 : 0);
-      }).reverse());
+      }).reverse();
+      const orderedUniquePosts = orderedPosts.reduce((unique, o) => {
+        if (!unique.some(obj => obj.id === o.id)) unique.push(o);
+        return unique;
+      }, []);
+      setSortedPosts(orderedUniquePosts);
     }
   }, [postsData]);
 
