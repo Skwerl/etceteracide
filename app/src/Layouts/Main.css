@@ -15,9 +15,17 @@
     animation: fade-in 3s;
     animation-fill-mode: both;
 }
+.fade-in-fast {
+    animation: fade-in 1s;
+    animation-fill-mode: both;
+}
 
 .fade-out {
     animation: fade-out 3s;
+    animation-fill-mode: both;
+}
+.fade-out-fast {
+    animation: fade-out 1s;
     animation-fill-mode: both;
 }
 

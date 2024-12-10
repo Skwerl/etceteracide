@@ -35,7 +35,7 @@ export default function Documents() {
       ? <Spinner />
       : <ul className="document-list">
         {!!loggedIn && <li><Link to={`/edit`}><SlNote />{'\u00A0'}New</Link></li>}
-        {sortedPosts.map((post, index) => <li key={index}>
+        {sortedPosts.map((post, index) => <li className="fade-in-fast" key={index}>
           {!!loggedIn &&
             <React.Fragment>
               <Link to={`/edit/${post.id}`}><SlNote /></Link>{'\u00A0'}
