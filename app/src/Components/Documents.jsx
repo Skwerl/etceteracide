@@ -8,6 +8,7 @@ import Spinner from '../Components/Spinner';
 export default function Documents() {
 
   const [page, setPage] = useState(1);
+  const [gotAllPosts, setGotAllPosts] = useState(false);
   const { sessionId: loggedIn } = useSelector((state) => state.tokenReducer);
   const { data: postsData = null, isLoading: postsLoading, error: loadError } = useGetPostsByPageQuery(page);
   const [sortedPosts, setSortedPosts] = useState([]);
@@ -26,7 +27,7 @@ export default function Documents() {
   }, [postsData]);
 
   useEffect(() => {
-    if (loadError && loadError.status === 400) setScrolledToEnd(true);
+    if (loadError && loadError.status === 400) setGotAllPosts(true);
   }, [loadError]);
 
   return <React.Fragment>
@@ -43,8 +44,8 @@ export default function Documents() {
         </li>)}
       </ul>
     }
-    {!postsLoading &&
-      <div style={{ marginTop: "40px", marginBottom: "30px" }}>
+    {!postsLoading && !gotAllPosts &&
+      <div style={{ marginTop: "40px" }}>
         <button onClick={() => setPage(page + 1)}>M O R E</button>
       </div>}
   </React.Fragment>

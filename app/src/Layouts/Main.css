@@ -1,3 +1,8 @@
+.main-wrapper {
+    margin: 20px 30px;
+    margin-bottom: 60px;
+}
+
 .document-list li:not(:last-child) {
     margin-bottom: 6px;
 }
