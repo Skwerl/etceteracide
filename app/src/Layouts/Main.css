@@ -11,6 +11,38 @@
     padding-right: 15px;
 }
 
+.fade-in {
+    animation: fade-in 3s;
+    animation-fill-mode: both;
+}
+
+.fade-out {
+    animation: fade-out 3s;
+    animation-fill-mode: both;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fade-out {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.fade-out button {
+    pointer-events: none;
+}
+
 @media screen and (max-width: 768px) {
     .document-list {
         padding-left: 24px;

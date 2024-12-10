@@ -44,8 +44,8 @@ export default function Documents() {
         </li>)}
       </ul>
     }
-    {!postsLoading && !gotAllPosts &&
-      <div style={{ marginTop: "40px" }}>
+    {!postsLoading &&
+      <div style={{ marginTop: "40px" }} className={gotAllPosts ? 'fade-out' : 'fade-in'}>
         <button onClick={() => setPage(page + 1)}>M O R E</button>
       </div>}
   </React.Fragment>
