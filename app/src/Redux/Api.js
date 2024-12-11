@@ -24,6 +24,13 @@ const endpoints = (builder) => ({
         query: (id) => `/images/${id}`,
         providesTags: (res, err, id) => [{ type: 'AQFile', id }]
     }),
+    findLegacy: builder.query({
+        query: (url) => ({
+            url: `/legacy/find`,
+            method: 'POST',
+            body: { url }
+        })
+    }),
     savePost: builder.mutation({
         query: (postObject) => ({
             url: `/items`,
@@ -70,6 +77,7 @@ export const {
     useGetPostsByPageQuery,
     useGetPostQuery,
     useGetAttachmentQuery,
+    useFindLegacyQuery,
     useSavePostMutation,
     useLazyIndexPostsQuery
 } = apiSvc;

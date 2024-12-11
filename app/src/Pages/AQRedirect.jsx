@@ -1,18 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useFindLegacyQuery } from '../Redux/Api';
 import Main from '../Layouts/Main';
-// import Spinner from '../Components/Spinner';
+import Spinner from '../Components/Spinner';
 
 export default function AQRedirect() {
 
-  const requesturl = window.location.pathname;
+  const requestpath = window.location.pathname;
+  const [urlQuery, setUrlQuery] = useState(null);
+  const [foundDocumentId, setFoundDocumentId] = useState(null);
+  const { data = null, isLoading } = useFindLegacyQuery(urlQuery, { skip: !!!urlQuery });
+
+  useEffect(() => {
+    if (data && data.length > 0 && !!data[0].id) {
+      const foundId = data[0].id;
+      setFoundDocumentId(foundId);
+      setTimeout(() => {
+        window.location.replace(`/document/${foundId}`);
+      }, 1000);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (!!requestpath && requestpath.length > 10) {
+      setUrlQuery(requestpath.substring(10,).toLowerCase());
+    }
+  }, [requestpath]);
 
   return <Main>
     <div className="content-wrapper document-wrapper">
-      <React.Fragment>
-        <p>I see you're looking for {requesturl.substring(10,)} from Antiquiet.</p>
-        <p>Soon I'll build a system that connects old Antiquiet URLs to their corresponding etceteracide documents. But I'll need a little more time, after I finish importing everything. So you'll have to come back later. In the meantime, you can bookmark this URL; eventually it will redirect to the resurrected content.</p>
-        <small>Skwerl, 12/9/2024</small>
-      </React.Fragment>
+
+      {isLoading
+        ? <Spinner />
+        : <React.Fragment>
+          {!!foundDocumentId
+            ? <span>Found! Redirecting...</span>
+            : <span>Sorry, couldn't find that document.</span>
+          }
+        </React.Fragment>
+      }
+
     </div>
   </Main>
 

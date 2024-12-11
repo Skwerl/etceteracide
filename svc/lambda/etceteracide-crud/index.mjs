@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
-import { ScanCommand, BatchGetCommand, GetCommand, PutCommand, DeleteCommand } from "@aws-sdk/lib-dynamodb";
+import { ScanCommand, QueryCommand, BatchGetCommand, GetCommand, PutCommand, DeleteCommand } from "@aws-sdk/lib-dynamodb";
 import { authenticator } from "otplib";
 
 const { DYNAMODB_ENDPOINT, TABLE_CONTENT, TABLE_PAGES, TABLE_USERS, TABLE_SESSIONS, TABLE_AQ_ATTACHMENTS, CRYPTO_KEY_HEX } = process.env;
@@ -143,6 +143,24 @@ export const handler = async (event, context) => {
                     Key: { id: event.pathParameters.id }
                 }));
                 body = query.Item;
+                break;
+            case "POST /legacy/find":
+                req = JSON.parse(event.body);
+                let { url: legacyUrl } = req;
+                if (!!legacyUrl) legacyUrl = legacyUrl.toLowerCase();
+                else legacyUrl = "";
+                query = await dynamo.send(new QueryCommand({
+                    TableName: TABLE_CONTENT,
+                    IndexName: "legacy-index",
+                    KeyConditionExpression: "#key = :value",
+                    ExpressionAttributeNames: {
+                        "#key": "original_url"
+                    },
+                    ExpressionAttributeValues: {
+                        ":value": legacyUrl
+                    }
+                }));
+                body = query.Items[0];
                 break;
             default:
                 throw new Error(`Unsupported route: "${event.routeKey}".`);
