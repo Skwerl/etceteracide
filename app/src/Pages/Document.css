@@ -1,12 +1,31 @@
-.content-wrapper.document-wrapper img {
-    max-width: 100%;
+.document-wrapper img {
+    width: 100%;
     height: auto;
+}
+
+.document-wrapper p,
+.document-wrapper div.embed {
+    margin: 1em 0px;
 }
 
 .document-wrapper .document-body h1,
 .document-wrapper .document-body h2,
 .document-wrapper .document-body h3 {
     font-size: 16px;
+}
+
+.document-wrapper blockquote {
+    font-style: italic;
+    line-height: 1.6em;
+    text-align: justify;
+    background-color: #eee;
+    padding: 20px 40px 20px 30px;
+    margin: 0;
+    border-radius: 15px 15px 0px 15px;
+}
+
+.Apple-converted-space {
+    display: none;
 }
 
 @media screen and (max-width: 768px) {

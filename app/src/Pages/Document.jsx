@@ -21,7 +21,7 @@ export default function Document() {
     if (postData && postData.date) setDocumentDate(new Date(postData.date).toLocaleDateString('en-US'));
   }, [postData]);
 
-  return <Main>
+  return <Main pagetitle={postData && postData.title}>
     <div className="content-wrapper document-wrapper">
       {postLoading
         ? <Spinner />
@@ -42,14 +42,16 @@ export default function Document() {
                   </div>
                 </React.Fragment>
               }
-              {/* <div className="document-body" dangerouslySetInnerHTML={{ __html: postData.content }} /> */}
               <div className="document-body">
                 {!!documentParagraphs && documentParagraphs.map((paragraph, index) => {
-                  const wrapper = document.createElement("span");
-                  wrapper.innerHTML = paragraph;
-                  const content = wrapper.getElementsByTagName("p")[0].innerHTML;
+
+                  const domElement = document.createElement("div");
+                  domElement.innerHTML = paragraph;
+                  const content = domElement.firstChild.innerHTML;
+
                   if (isUrl(content)) return <div key={index} className="embed"><Embed url={content} /></div>
-                  else return <p key={index} dangerouslySetInnerHTML={{ __html: content }} />
+                  else return <div key={index} dangerouslySetInnerHTML={{ __html: domElement.innerHTML }} />
+
                 })}
               </div>
               <small>{`${documentAuthor}, ${documentDate}`}</small>

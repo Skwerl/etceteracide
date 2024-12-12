@@ -96,9 +96,10 @@ div.header.antiquiet h2 {
 @media screen and (max-width: 768px) {
   body,
   p,
+  blockquote,
   h1,
   h2 {
-    text-align: initial;
+    text-align: initial !important;
   }
   h1 {
     font-size: 32px;
