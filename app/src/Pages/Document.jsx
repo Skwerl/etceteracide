@@ -4,7 +4,7 @@ import { useGetPostQuery } from '../Redux/Api';
 import Embed from 'react-embed';
 import Main from '../Layouts/Main';
 import Spinner from '../Components/Spinner';
-import { isUrl } from '../Helpers';
+import { isUrl, aqReplacements } from '../Helpers';
 import './Document.css';
 
 export default function Document() {
@@ -45,8 +45,10 @@ export default function Document() {
               <div className="document-body">
                 {!!documentParagraphs && documentParagraphs.map((paragraph, index) => {
 
+                  const rawHTML = aqReplacements(paragraph);
+
                   const domElement = document.createElement("div");
-                  domElement.innerHTML = paragraph;
+                  domElement.innerHTML = rawHTML;
                   const content = domElement.firstChild.innerHTML;
 
                   if (isUrl(content)) return <div key={index} className="embed"><Embed url={content} /></div>
