@@ -61,4 +61,11 @@
     .header.antiquiet > strong {
         font-size: 14px;
     }
+
+    .document-wrapper .caption {
+        max-width: 100%;
+        width: 100%;
+        float: none;
+        margin-top: 6px;
+    }
 }
