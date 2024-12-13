@@ -39,7 +39,8 @@
     float: right;
     margin-left: 20px;
 }
-.document-wrapper .caption.alignnone {
+.document-wrapper .caption.alignnone,
+.document-wrapper .caption.aligncenter {
     max-width: 100%;
 }
 
