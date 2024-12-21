@@ -118,7 +118,7 @@ export default function Filter(props) {
                 <div className="filter-text">
                     {(loaded === filtered)
                         ? <React.Fragment>
-                            {`${loaded} Documents`}
+                            {`${loaded} Documents Loaded`}
                         </React.Fragment>
                         : <React.Fragment>
                             {`${filtered} Documents (${loaded - filtered} Filtered)`}

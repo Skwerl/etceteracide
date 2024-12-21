@@ -76,3 +76,20 @@
         }
     }
 }
+
+@media screen and (max-width: 768px) {
+    .filter-form {
+        form {
+            width: 320px;
+            .buttons > div {
+                flex-basis: 100%;
+            }
+            .buttons button {
+                width: 100%;
+                font-size: 14px;
+                padding: 10px 15px;
+                margin: 0 0 10px !important;
+            }
+        }
+    }
+}
