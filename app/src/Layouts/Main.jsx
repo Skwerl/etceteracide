@@ -27,7 +27,9 @@ export default function Main(props) {
 
     return <React.Fragment>
         <div className="main-wrapper">
-            <h1><Link to="/">{SITE_NAME}</Link></h1>
+            <div className="main-header">
+                <h1><Link to="/">{SITE_NAME}</Link></h1>
+            </div>
             {(!auth || loggedIn)
                 ? children
                 : <Spinner />

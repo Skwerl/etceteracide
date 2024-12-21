@@ -5,8 +5,27 @@
     margin-right: auto;
 }
 
+.main-header {
+    height: 75px;
+    padding-bottom: 15px;
+    & > h1 {
+        margin: 0;
+        line-height: 75px;
+    }
+}
+
+.documents-wrapper {
+    padding-top: 80px;
+}
+
+.document-list {
+    padding-left: 24px;
+    list-style-type: none;
+    padding-left: 2px;
+}
+
 .document-list li:not(:last-child) {
-    margin-bottom: 6px;
+    margin-bottom: 10px;
 }
 
 .document-wrapper {
@@ -19,6 +38,10 @@
 }
 .fade-in-fast {
     animation: fade-in 1s;
+    animation-fill-mode: both;
+}
+.fade-in-faster {
+    animation: fade-in 0.5s;
     animation-fill-mode: both;
 }
 
@@ -55,8 +78,6 @@
 
 @media screen and (max-width: 768px) {
     .document-list {
-        padding-left: 24px;
-        list-style-type: none;
         padding-left: 1px;
     }
     .document-list li:not(:last-child) {

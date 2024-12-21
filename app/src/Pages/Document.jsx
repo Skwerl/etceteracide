@@ -5,7 +5,7 @@ import Embed from 'react-embed';
 import Main from '../Layouts/Main';
 import Spinner from '../Components/Spinner';
 import { isUrl, aqReplacements } from '../Helpers';
-import './Document.css';
+import './Document.scss';
 
 export default function Document() {
 
@@ -29,6 +29,7 @@ export default function Document() {
           {(!!postData && !!postData.content)
 
             ? <React.Fragment>
+
               {!!postData.antiquiet
                 ? <React.Fragment>
                   <div className="header antiquiet">
@@ -42,21 +43,24 @@ export default function Document() {
                   </div>
                 </React.Fragment>
               }
+
+              {!!postData.tags && <div className="document-tags">
+                <ul>{postData.tags.map((tag, index) => <li key={index}>{tag}</li>)}</ul>
+              </div>}
+
               <div className="document-body">
                 {!!documentParagraphs && documentParagraphs.map((paragraph, index) => {
-
                   const rawHTML = aqReplacements(paragraph);
-
                   const domElement = document.createElement("div");
                   domElement.innerHTML = rawHTML;
                   const content = domElement.firstChild.innerHTML;
-
                   if (isUrl(content)) return <div key={index} className="embed"><Embed url={content} /></div>
                   else return <div key={index} dangerouslySetInnerHTML={{ __html: domElement.innerHTML }} />
-
                 })}
               </div>
+
               <small>{`${documentAuthor}, ${documentDate}`}</small>
+
             </React.Fragment>
 
             : <React.Fragment>
