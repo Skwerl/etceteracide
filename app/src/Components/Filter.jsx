@@ -69,7 +69,7 @@ export default function Filter(props) {
     const stickyFilter = (e) => {
         const filterWrapper = document.querySelector(".filter-wrapper");
         const scrollTop = window.scrollY;
-        scrollTop >= 90 ? filterWrapper.classList.add("stuck") : filterWrapper.classList.remove("stuck");
+        scrollTop >= 110 ? filterWrapper.classList.add("stuck") : filterWrapper.classList.remove("stuck");
     };
 
     const applyFilters = (e) => {
