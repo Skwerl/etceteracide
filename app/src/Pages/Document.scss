@@ -7,6 +7,13 @@
     p,
     div.embed {
         margin: 1em 0;
+        & > div {
+            aspect-ratio: 16 / 9;
+            iframe {
+                width: 100%;
+                height: 100%;
+            }
+        }
     }
 
     .document-body {
