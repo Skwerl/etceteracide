@@ -16,7 +16,10 @@ export default function Document() {
   const { data: postData = null, isLoading: postLoading } = useGetPostQuery(id);
 
   useEffect(() => {
-    if (postData && postData.content) setDocumentParagraphs(postData.content.split("\n\n"));
+    if (postData && postData.content) {
+      const documentLines = postData.content.split("\n");
+      setDocumentParagraphs(documentLines.filter(line => !!line.trim().length));
+    }
     if (postData && postData.author) setDocumentAuthor(postData.author);
     if (postData && postData.date) setDocumentDate(new Date(postData.date).toLocaleDateString('en-US'));
   }, [postData]);
